@@ -1,5 +1,5 @@
 #%% [markdown]
-# # Get started with TensorFlow 2.0 for beginners
+# # Get started with TensorFlow 2.0
 # In this example we train an image classifier. 
 
 
@@ -16,13 +16,27 @@ from tensorflow.compat.v1 import InteractiveSession
 config = ConfigProto()
 config.gpu_options.allow_growth = True
 session = InteractiveSession(config=config)
+
+
+#%% [markdown]
+# **Print versions**
 #%%
-print("Tensorflow version: " + tf.__version__)
+!cat /etc/*release
+#%%
+!nvidia-smi --query-gpu=driver_version --format=csv,noheader
+#%%
+!cat /usr/local/cuda*/version.txt
+#%%
+!cat /usr/include/x86_64-linux-gnu/cudnn_v*.h | grep CUDNN_MAJOR -A 2
+#%%
+!dpkg -l | grep TensorRT
+#%%
+print(tf.__version__)
 
 
 
 #%% [markdown]
-# **Verify GPU**
+# **Check GPU**
 #%%
 device_lib.list_local_devices()
 #%%
@@ -78,10 +92,13 @@ model.compile(optimizer='adam',
 # **Train and evaluate the model**
 #%%
 tms_start = datetime.datetime.now()
-model.fit(x_train, y_train, epochs=30, batch_size=128)
+model.fit(x_train, y_train, epochs=30, batch_size=64)
 tms_end = datetime.datetime.now()
 tms_delta = tms_end - tms_start
 print("Elapsed: " + str(tms_delta))
 print("Elapsed in seconds: " + str(int(tms_delta.total_seconds())))
 #%%
-model.evaluate(x_test, y_test)
+model.evaluate(x_test, y_test, verbose=0)
+
+
+#%%
